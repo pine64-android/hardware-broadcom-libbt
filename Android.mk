@@ -6,6 +6,24 @@ include $(CLEAR_VARS)
 
 BDROID_DIR := $(TOP_DIR)external/bluetooth/bluedroid
 
+ifeq ($(BOARD_HAVE_BLUETOOTH_NAME), ap6210)
+LOCAL_CFLAGS += -DUSE_AP6210_BT_MODULE
+endif
+
+ifeq ($(BOARD_HAVE_BLUETOOTH_NAME), ap6212)
+LOCAL_CFLAGS += -DUSE_AP6212_BT_MODULE
+endif
+
+ifeq ($(BOARD_HAVE_BLUETOOTH_NAME), ap6476)
+LOCAL_CFLAGS += -DUSE_AP6476_BT_MODULE
+endif
+
+ifeq ($(BOARD_HAVE_BLUETOOTH_NAME), ap6335)
+LOCAL_CFLAGS += -DUSE_AP6335_BT_MODULE    
+endif
+
+LOCAL_CFLAGS += -DHAVE_BLUETOOTH_BCM
+
 LOCAL_SRC_FILES := \
         src/bt_vendor_brcm.c \
         src/hardware.c \

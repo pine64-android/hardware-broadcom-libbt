@@ -89,10 +89,16 @@ uint8_t userial_to_tcio_baud(uint8_t cfg_baud, uint32_t *baud)
         *baud = B115200;
     else if (cfg_baud == USERIAL_BAUD_4M)
         *baud = B4000000;
+    else if (cfg_baud == USERIAL_BAUD_3_5M)
+        *baud = B3500000;
     else if (cfg_baud == USERIAL_BAUD_3M)
         *baud = B3000000;
+    else if (cfg_baud == USERIAL_BAUD_2_5M)
+        *baud = B2500000;
     else if (cfg_baud == USERIAL_BAUD_2M)
         *baud = B2000000;
+	else if (cfg_baud == USERIAL_BAUD_1_5M)
+		*baud = B1500000;
     else if (cfg_baud == USERIAL_BAUD_1M)
         *baud = B1000000;
     else if (cfg_baud == USERIAL_BAUD_921600)
@@ -245,6 +251,16 @@ int userial_vendor_open(tUSERIAL_CFG *p_cfg)
         ALOGE("userial vendor open: unable to open %s", vnd_userial.port_name);
         return -1;
     }
+
+#if defined(USE_AP6210_BT_MODULE) || defined(USE_AP6476_BT_MODULE) || defined(USE_AP6335_BT_MODULE) || defined(USE_AP6212_BT_MODULE)
+       usleep(100000);
+       close(vnd_userial.fd);
+       if ((vnd_userial.fd = open(vnd_userial.port_name, O_RDWR)) == -1)
+    {
+	    ALOGE("userial vendor open: unable to open %s", vnd_userial.port_name);
+	    return -1;
+    }
+#endif
 
     tcflush(vnd_userial.fd, TCIOFLUSH);
 
